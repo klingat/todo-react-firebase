@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const Todo = () => {
+export const ToDo = () => {
   return (
     <div> Hello todo</div>
   )
