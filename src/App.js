@@ -1,59 +1,29 @@
 import React from 'react'
-import logo from './logo.svg'
-import { ToDo } from './components/ToDo'
-import styled, { keyframes } from 'styled-components'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { LogIn } from './components/LogIn'
+import { Register } from './components/Register'
+import { Homepage } from './components/Homepage'
+import { Dashboard } from './components/Dashboard'
 
-const appLogoSpin = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-`
+import { MuiThemeProvider } from '@material-ui/core/styles'
+import { createTheme } from '@material-ui/core/styles'
+import { CssBaseline } from '@material-ui/core'
 
-const Container = styled.div`
-  text-align: center;
-`
-
-const AppHeader = styled.header`
-    background-color: #282c34;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
-    a {
-      color: #61dafb;
-    }
-`
-
-const AppLogo = styled.img`
-    height: 40vmin;
-    pointer-events: none;
-    animation: ${appLogoSpin} infinite 20s linear;
-`
+const theme = createTheme()
 
 function App() {
-  return (
-    <Container>
-      <AppHeader>
-        <AppLogo src={logo} alt="logo" />
-        <p>Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-            Learn React
-        </a>
-      </AppHeader>
-      <ToDo />
-    </Container>
+  return(
+    <MuiThemeProvider theme={theme}>
+      <CssBaseline/>
+      <Router>
+        <Switch>
+          <Route exact path='/' component={Homepage} />
+          <Route exact path='/register' component={Register} />
+          <Route exact path='/login' component={LogIn} />
+          <Route exact path='/dashboard' component={Dashboard} />
+        </Switch>
+      </Router>
+    </MuiThemeProvider>
   )
 }
 
