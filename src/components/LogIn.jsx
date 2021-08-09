@@ -1,7 +1,8 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useCallback, useContext } from 'react'
+import { Link, useHistory } from 'react-router-dom'
+import { Redirect } from 'react-router'
 
-
+import { firebaseApp } from '../firebase-config'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
@@ -13,6 +14,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 
 import { REGISTER } from '../constants/urls'
+import { AuthContext } from '../Authentication'
 
 const Copyright = () => {
   return (
@@ -49,8 +51,29 @@ const useStyles = makeStyles((theme) => ({
 
 export const LogIn = () => {
   const classes = useStyles()
+  let history = useHistory()
 
-  const handleLogin = () => {}
+  const handleLogin = useCallback(
+    async event => {
+      event.preventDefault()
+      const { email, password } = event.target.elements
+      try {
+        await firebaseApp
+          .auth()
+          .signInWithEmailAndPassword(email.value, password.value)
+        history.push('/')
+      } catch (error) {
+        alert(error)
+      }
+    },
+    [history]
+  )
+
+  const { currentUser } = useContext(AuthContext)
+
+  if (currentUser) {
+    return <Redirect to="/" />
+  }
 
   return (
     <Container component="main" maxWidth="xs">

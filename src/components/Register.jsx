@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import { Copyright } from './Copyright'
 
@@ -11,8 +11,9 @@ import Box from '@material-ui/core/Box'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { LOGIN } from '../constants/urls'
+import { firebaseApp } from '../firebase-config'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -36,8 +37,20 @@ const useStyles = makeStyles((theme) => ({
 
 export const Register = () => {
   const classes = useStyles()
+  let history = useHistory()
 
-  const handleSignUp = () => {}
+  const handleSignUp = useCallback(async event => {
+    event.preventDefault()
+    const { email, password } = event.target.elements
+    try {
+      await firebaseApp
+        .auth()
+        .createUserWithEmailAndPassword(email.value, password.value)
+      history.push('/')
+    } catch (error) {
+      alert(error)
+    }
+  }, [history])
 
   return (
     <Container component="main" maxWidth="xs">
